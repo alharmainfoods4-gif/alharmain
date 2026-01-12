@@ -1,0 +1,172 @@
+/* About.css */
+
+/* 1. HERO SECTION */
+.about-hero {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 4rem;
+    position: relative;
+}
+
+.about-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+}
+
+/* 2. IMAGE BANNER */
+.about-banner {
+    width: 100%;
+    height: 400px;
+    border-radius: 30px;
+    overflow: hidden;
+    margin-bottom: 5rem;
+    position: relative;
+    border: 1px solid rgba(201, 162, 77, 0.2);
+}
+
+.about-banner-text {
+    position: absolute;
+    bottom: 3rem;
+    left: 3rem;
+    max-width: 400px;
+}
+
+@media (max-width: 768px) {
+    .about-banner {
+        height: 280px;
+        margin-bottom: 3rem;
+        border-radius: 20px;
+    }
+
+    .about-banner-text {
+        bottom: 1.5rem;
+        left: 1.5rem;
+        right: 1.5rem;
+        max-width: none;
+    }
+
+    .about-banner-text h3 {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* 3. STATS COUNTER */
+.stats-counter {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 6rem;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .stats-counter {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 4rem;
+    }
+
+    .stats-counter .stat-number {
+        font-size: 2.5rem !important;
+    }
+}
+
+/* 4. TIMELINE */
+.timeline-section {
+    margin-bottom: 6rem;
+    position: relative;
+}
+
+.timeline-container {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, var(--brand-primary), transparent);
+    transform: translateX(-50%);
+    transform-origin: top;
+}
+
+@media (max-width: 768px) {
+    .timeline-section {
+        margin-bottom: 4rem;
+    }
+
+    .timeline-line {
+        left: 20px;
+    }
+
+    .timeline-item {
+        padding-left: 50px !important;
+        padding-right: 0 !important;
+        justify-content: flex-start !important;
+    }
+
+    .timeline-item>.card-modern {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        text-align: left !important;
+    }
+
+    .timeline-dot {
+        left: 20px !important;
+    }
+}
+
+/* 5. VALUES GRID */
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+}
+
+.value-card {
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .values-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .value-card {
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* 6. GLOBAL FOOTPRINT */
+.global-footprint-card {
+    position: relative;
+    padding: 0;
+    border-radius: 30px;
+    background: var(--surface-color);
+    overflow: hidden;
+}
+
+.global-footprint-card img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .global-footprint-card {
+        border-radius: 20px;
+    }
+
+    .global-footprint-card img {
+        height: 300px;
+    }
+}

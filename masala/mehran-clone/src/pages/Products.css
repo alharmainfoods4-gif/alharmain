@@ -1,0 +1,259 @@
+/* Products.css */
+
+/* 1. HEADER & FILTERS */
+.products-header {
+    text-align: center;
+    margin: 2rem 0 4rem;
+}
+
+.products-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--text-main);
+}
+
+.sticky-filter-bar {
+    position: sticky;
+    top: 70px;
+    z-index: 50;
+    background: rgba(11, 11, 11, 0.95);
+    backdrop-filter: blur(15px);
+    padding: 1rem 0;
+    margin: 0 -2rem 4rem;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid rgba(201, 162, 77, 0.1);
+}
+
+.filter-buttons-container {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .products-header {
+        margin: 1rem 0 2rem;
+    }
+
+    .sticky-filter-bar {
+        padding: 0.75rem 0;
+        margin: 0 -1rem 2rem;
+    }
+
+    .filter-buttons-container {
+        padding: 0 0.5rem;
+    }
+
+    .filter-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* 2. PRODUCT GRID */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.product-card {
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    height: 480px;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-img-area {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    padding: 2rem;
+    background: #121212;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 350px;
+}
+
+.product-info-area {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: #161616;
+}
+
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        /* Full width on mobile */
+        gap: 1.5rem;
+    }
+
+    .product-card {
+        height: auto;
+    }
+
+    .product-img-area {
+        padding: 1.5rem;
+        min-height: 300px;
+    }
+
+    .product-info-area {
+        padding: 1rem;
+    }
+}
+
+/* 3. DETAILS VIEW */
+.product-details-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    margin-bottom: 6rem;
+    align-items: start;
+}
+
+.details-visual {
+    padding: 4rem;
+    background: radial-gradient(circle at center, #222 0%, #0e0e0e 70%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 550px;
+    position: sticky;
+    top: 120px;
+    align-self: start;
+}
+
+.details-info {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.product-title-large {
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    color: var(--text-main);
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.price-row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.action-row {
+    display: flex;
+    gap: 1rem;
+    height: 60px;
+}
+
+.quantity-control {
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    padding: 0 1rem;
+    border: 1px solid #333;
+}
+
+@media (max-width: 768px) {
+    .product-details-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .details-visual {
+        padding: 2rem;
+        min-height: 300px;
+        position: relative;
+        top: 0;
+    }
+
+    .details-info {
+        max-height: none;
+        overflow-y: visible;
+        padding-right: 0;
+    }
+
+    .price-row {
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .action-row {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .quantity-control {
+        height: 50px;
+    }
+}
+
+/* 4. REVIEWS & PAIRINGS */
+.reviews-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+}
+
+@media (max-width: 768px) {
+    .reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+.perfect-pairings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 2rem;
+}
+
+.pairing-card {
+    /* Using styles from card-modern but specific overrides if needed */
+}
+
+/* 5. CHECKOUT MODAL */
+.checkout-modal-content {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+}
+
+.checkout-form {
+    padding: 3rem;
+    border-right: 1px solid rgba(201, 162, 77, 0.2);
+}
+
+@media (max-width: 768px) {
+    .checkout-modal-content {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-form {
+        padding: 1.5rem;
+        border-right: none;
+        border-bottom: 1px solid rgba(201, 162, 77, 0.2);
+    }
+}

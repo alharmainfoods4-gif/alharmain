@@ -1,0 +1,479 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+    /* Brand Colors - Islamic Premium */
+    --brand-primary: #C9A24D;
+    /* Premium Gold */
+    --brand-secondary: #3B2A1A;
+    /* Rich Brown */
+    --brand-black: #0B0B0B;
+    /* Deep Black */
+    --brand-dark: #141414;
+    /* Offset Dark */
+
+    /* Surface Colors */
+    --surface-bg: #0B0B0B;
+    --surface-card: #1A1A1A;
+    --surface-glass: rgba(10, 10, 10, 0.85);
+
+    /* Text Colors - High Contrast Fix */
+    --text-main: #FFFFFF;
+    /* Pure White */
+    --text-muted: #E0E0E0;
+    /* Light Grey */
+    --text-gold: #C9A24D;
+
+    /* Shadows & Effects */
+    --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px rgba(201, 162, 77, 0.15);
+    --glass-blur: blur(16px);
+
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Outfit', sans-serif;
+
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--surface-bg);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    /* Subtle Geometric Decoration - Reduced Opacity */
+    background-image:
+        radial-gradient(circle at 50% 0%, rgba(59, 42, 26, 0.1) 0%, transparent 60%),
+        linear-gradient(rgba(11, 11, 11, 0.98), rgba(11, 11, 11, 0.98)),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A24D' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ... existing code ... */
+
+.card-modern:hover {
+    transform: translateY(-3px);
+    border-color: rgba(201, 162, 77, 0.4);
+    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* ... existing code ... */
+
+.shimmer-gold {
+    background: linear-gradient(90deg,
+            var(--brand-primary) 0%,
+            #FFE5B4 50%,
+            var(--brand-primary) 100%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shim-gold 6s linear infinite;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text-main);
+    font-family: var(--font-heading);
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+}
+
+h2 {
+    font-size: clamp(2rem, 4vw + 1rem, 3.5rem);
+}
+
+h3 {
+    font-size: clamp(1.5rem, 3vw + 0.5rem, 2.5rem);
+}
+
+h4 {
+    font-size: clamp(1.2rem, 2vw + 0.5rem, 1.8rem);
+}
+
+h5 {
+    font-size: clamp(1rem, 1.5vw + 0.5rem, 1.4rem);
+}
+
+h6 {
+    font-size: clamp(0.9rem, 1vw + 0.5rem, 1.1rem);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 clamp(1rem, 5vw, 4rem);
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1.5rem;
+    }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--brand-secondary);
+    border-radius: 5px;
+    border: 2px solid #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-primary);
+}
+
+/* Component Styles (Dark Premium) */
+.card-modern {
+    background: linear-gradient(145deg, #1a1a1a, #141414);
+    border: 1px solid rgba(201, 162, 77, 0.1);
+    border-radius: 16px;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.5s var(--ease-out-expo);
+    overflow: hidden;
+}
+
+.card-modern:hover {
+    transform: translateY(-5px);
+    border-color: var(--brand-primary);
+    box-shadow: var(--shadow-glow);
+}
+
+.glass-panel {
+    background: rgba(10, 10, 10, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(201, 162, 77, 0.2);
+    border-radius: 20px;
+}
+
+/* Gold Primary Button */
+.btn-primary-v2 {
+    background: var(--brand-primary);
+    color: #000;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(201, 162, 77, 0.3);
+}
+
+.btn-primary-v2:hover {
+    background: #fff;
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+}
+
+/* Gold Outline Button */
+.btn-outline-v2 {
+    background: transparent;
+    color: var(--brand-primary);
+    border: 1px solid var(--brand-primary);
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-v2:hover {
+    background: var(--brand-primary);
+    color: #000;
+}
+
+/* Layout Utilities */
+.grid-asymmetric {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+@media (max-width: 968px) {
+    .grid-asymmetric {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.fade-in {
+    animation: fadeInUp 0.8s var(--ease-out-expo) forwards;
+}
+
+/* Advanced Glassmorphism Header */
+.glass-header {
+    background: rgba(11, 11, 11, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(201, 162, 77, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-header.scrolled {
+    background: rgba(11, 11, 11, 0.95);
+    padding: 0.8rem 0;
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid var(--brand-primary);
+}
+
+
+
+/* Text Selection */
+::selection {
+    background: var(--brand-primary);
+    color: #000;
+}
+
+/* ========================================= */
+/* ENTERPRISE ANIMATION UTILITIES - V2.0 */
+/* ========================================= */
+
+/* 1. Masked Text Reveal (Future Standard) */
+.text-reveal-mask {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    line-height: 1.2;
+}
+
+.text-reveal-mask .char {
+    display: inline-block;
+    transform: translateY(110%);
+    transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.text-reveal-mask.visible .char {
+    transform: translateY(0);
+}
+
+
+/* 2. Gold Shimmer Effect */
+@keyframes shim-gold {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer-gold {
+    background: linear-gradient(90deg,
+            var(--brand-primary) 0%,
+            #FFE5B4 50%,
+            var(--brand-primary) 100%);
+    background-size: 200% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shim-gold 3s linear infinite;
+}
+
+/* 3. Ambient Float (Breathing) */
+@keyframes floatY {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.float-anim {
+    animation: floatY 6s ease-in-out infinite;
+}
+
+.float-anim-delay-1 {
+    animation-delay: 1s;
+}
+
+.float-anim-delay-2 {
+    animation-delay: 2s;
+}
+
+/* 4. Layering System */
+.z-layer-1 {
+    z-index: 10;
+    position: relative;
+}
+
+.z-layer-2 {
+    z-index: 20;
+    position: relative;
+}
+
+.z-layer-3 {
+    z-index: 30;
+    position: relative;
+}
+
+.z-layer-top {
+    z-index: 100;
+    position: relative;
+}
+
+/* 5. Smooth Page Transitions */
+.page-enter {
+    opacity: 0;
+    transform: scale(0.98);
+}
+
+.page-enter-active {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 500ms, transform 500ms var(--ease-out-expo);
+}
+
+.page-exit {
+    opacity: 1;
+}
+
+.page-exit-active {
+    opacity: 0;
+    transition: opacity 300ms;
+}
+
+/* ========================================= */
+/* RESPONSIVE DESIGN - MOBILE & TABLET */
+/* ========================================= */
+
+/* Tablet and below (≤1024px) */
+@media (max-width: 1024px) {
+    h1 {
+        font-size: clamp(2.5rem, 6vw, 4rem) !important;
+    }
+
+    h2 {
+        font-size: clamp(2rem, 5vw, 3.5rem) !important;
+    }
+
+    h3 {
+        font-size: clamp(1.5rem, 4vw, 2.5rem) !important;
+    }
+
+    .grid-asymmetric {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .btn-primary-v2,
+    .btn-outline-v2 {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Mobile (≤768px) */
+@media (max-width: 768px) {
+    body {
+        font-size: 0.95rem;
+    }
+
+    h1 {
+        font-size: clamp(2rem, 8vw, 3rem) !important;
+    }
+
+    h2 {
+        font-size: clamp(1.75rem, 6vw, 2.5rem) !important;
+    }
+
+    h3 {
+        font-size: clamp(1.25rem, 5vw, 1.75rem) !important;
+    }
+
+    h4 {
+        font-size: clamp(1.1rem, 4vw, 1.4rem) !important;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .btn-primary-v2,
+    .btn-outline-v2 {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.85rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    .glass-panel {
+        padding: 1.5rem !important;
+        border-radius: 12px;
+    }
+
+    .card-modern {
+        border-radius: 12px;
+    }
+
+    /* Hide mobile utility class */
+    .hide-mobile {
+        display: none !important;
+    }
+
+    /* Stack grids vertically */
+    .grid-asymmetric,
+    [style*="grid-template-columns"] {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+    }
+}
+
+/* Small Mobile (≤480px) */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 0.75rem;
+    }
+
+    .btn-primary-v2,
+    .btn-outline-v2 {
+        padding: 0.7rem 1rem;
+        font-size: 0.8rem;
+        border-radius: 30px;
+    }
+}

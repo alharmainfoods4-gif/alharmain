@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+
+* {
+    transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease;
+}
+
+/* ============================================
+   COMPONENT UTILITIES
+   ============================================ */
+
+/* Card Component - Light theme white, dark theme dark */
+.card {
+    background-color: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.dark .card {
+    background-color: rgb(2, 6, 23);
+    border-color: rgb(30, 41, 59);
+}
+
+/* Primary Button */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    background-color: #3B82F6;
+    border: 2px solid #3B82F6;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 200ms ease;
+}
+
+.btn-primary:hover {
+    background-color: #2563EB;
+    border-color: #2563EB;
+}
+
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:disabled {
+    background-color: #93C5FD;
+    border-color: #93C5FD;
+    cursor: not-allowed;
+}
+
+/* Secondary Button */
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background-color: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 200ms ease;
+}
+
+.dark .btn-secondary {
+    background-color: rgb(2, 6, 23);
+    border-color: rgb(30, 41, 59);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #F9FAFB;
+}
+
+.dark .btn-secondary:hover {
+    background-color: rgb(30, 41, 59);
+}
+
+.btn-secondary:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #E5E7EB;
+}
+
+.btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Input Field */
+.input {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    background-color: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 0.5rem;
+    transition: all 200ms ease;
+}
+
+.dark .input {
+    background-color: rgb(2, 6, 23);
+    border-color: rgb(30, 41, 59);
+    color: white;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.input::placeholder {
+    color: #6B7280;
+    opacity: 0.6;
+}
+
+.dark .input::placeholder {
+    color: #9CA3AF;
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+/* Utility class for custom scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 10px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #334155;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* Firefox */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #D1D5DB transparent;
+}
+
+.dark .custom-scrollbar {
+    scrollbar-color: #334155 transparent;
+}
+
+/* Base styles to prevent layout shift */
+html {
+    scrollbar-gutter: stable;
+}
+
+body {
+    overflow-x: hidden;
+    background-color: #F9FAFB;
+}
+
+.dark body {
+    background-color: rgb(2, 6, 23);
+}

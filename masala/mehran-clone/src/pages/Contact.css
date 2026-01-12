@@ -1,0 +1,85 @@
+/* Contact.css */
+
+/* 1. CONTACT PAGE WRAPPER */
+.contact-page {
+    padding-top: 140px;
+    padding-bottom: 6rem;
+    min-height: 100vh;
+    background: var(--surface-bg);
+    position: relative;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .contact-page {
+        padding-top: 100px;
+        padding-bottom: 3rem;
+    }
+}
+
+/* 2. CONTACT HEADER */
+.contact-header {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.contact-header h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--text-main);
+    font-family: 'Playfair Display', serif;
+}
+
+@media (max-width: 768px) {
+    .contact-header {
+        margin-bottom: 3rem;
+    }
+}
+
+/* 3. CONTACT GRID LAYOUT */
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 3rem;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}
+
+/* 4. CONTACT FORM */
+.contact-form-card {
+    padding: 2.5rem;
+    background: #121212;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .contact-form-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 5. SUCCESS STATE */
+.success-state {
+    text-align: center;
+    padding: 3rem;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

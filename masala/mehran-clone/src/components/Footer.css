@@ -1,0 +1,105 @@
+/* Footer.css */
+
+/* 1. FOOTER WRAPPER */
+.site-footer {
+    background: linear-gradient(to top, var(--brand-black), var(--surface-card));
+    padding: 6rem 0 3rem;
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgba(201, 162, 77, 0.1);
+}
+
+@media (max-width: 768px) {
+    .site-footer {
+        padding: 3rem 0 2rem;
+    }
+}
+
+/* 2. FOOTER GRID */
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 4rem;
+    margin-bottom: 5rem;
+}
+
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+}
+
+/* 3. FOOTER BRAND */
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.footer-brand img {
+    height: 70px;
+    border-radius: 50%;
+    border: 1px solid var(--brand-primary);
+}
+
+.footer-brand h3 {
+    margin: 0;
+    color: var(--brand-primary);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+}
+
+@media (max-width: 768px) {
+    .footer-brand img {
+        height: 60px;
+    }
+
+    .footer-brand h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* 4. SOCIAL ICONS */
+.social-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid var(--brand-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand-primary);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.social-icon:hover {
+    background: var(--brand-primary);
+    color: #000;
+}
+
+@media (max-width: 768px) {
+    .social-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* 5. FOOTER BOTTOM */
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .footer-bottom {
+        padding-top: 1.5rem;
+        font-size: 0.8rem;
+    }
+}
