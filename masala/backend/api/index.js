@@ -8,21 +8,12 @@ const dns = require('dns');
 dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
 
 require('dotenv').config();
-const app = require('../app');
 const connectDB = require('../config/database');
+const app = require('../app');
 
-// Connect to database
-let isConnected = false;
-
-const connectOnce = async () => {
-    if (!isConnected) {
-        await connectDB();
-        isConnected = true;
-    }
-};
-
-// Ensure DB is connected before handling requests
-connectOnce();
+// Connect to database on cold start
+connectDB().catch(err => console.error('DB Connection Error:', err.message));
 
 // Export the Express app as a Vercel serverless function
 module.exports = app;
+
