@@ -19,8 +19,12 @@ app.use(helmet());
 app.use(mongoSanitize());
 
 // CORS configuration
+const allowedOrigins = process.env.FRONTEND_URL === '*'
+    ? true
+    : (process.env.FRONTEND_URL || 'http://localhost:5173').split(',');
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: allowedOrigins,
     credentials: true
 }));
 
