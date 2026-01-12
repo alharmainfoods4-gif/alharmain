@@ -61,4 +61,4 @@ const wholesaleSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Wholesale', wholesaleSchema);
+module.exports = mongoose.models.Wholesale || mongoose.model('Wholesale', wholesaleSchema);

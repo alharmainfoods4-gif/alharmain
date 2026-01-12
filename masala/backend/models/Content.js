@@ -38,4 +38,4 @@ const contentSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Content', contentSchema);
+module.exports = mongoose.models.Content || mongoose.model('Content', contentSchema);

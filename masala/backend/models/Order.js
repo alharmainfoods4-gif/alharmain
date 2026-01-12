@@ -109,4 +109,4 @@ orderSchema.pre('validate', function (next) {
     next();
 });
 
-module.exports = mongoose.model('Order', orderSchema);
+module.exports = mongoose.models.Order || mongoose.model('Order', orderSchema);
