@@ -19,14 +19,35 @@ app.use(helmet());
 app.use(mongoSanitize());
 
 // CORS configuration
-const allowedOrigins = process.env.FRONTEND_URL === '*'
-    ? true
-    : (process.env.FRONTEND_URL || 'http://localhost:5173').split(',');
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
 
-app.use(cors({
-    origin: allowedOrigins,
-    credentials: true
-}));
+        // In production with FRONTEND_URL=*, allow all origins
+        if (process.env.FRONTEND_URL === '*') {
+            return callback(null, true);
+        }
+
+        // Otherwise check against allowed list
+        const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173').split(',');
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        // Default: allow in development, deny in production
+        if (process.env.NODE_ENV !== 'production') {
+            return callback(null, true);
+        }
+
+        callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
+app.use(cors(corsOptions));
 
 // Rate limiting
 const limiter = rateLimit({
