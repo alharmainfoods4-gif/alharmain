@@ -130,7 +130,8 @@ const AddGiftBox = () => {
                 newImageItems.forEach(item => uploadFormData.append('images', item.file));
 
                 const token = localStorage.getItem('adminToken');
-                const uploadResponse = await fetch('http://localhost:5000/api/upload/multiple', {
+                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+                const uploadResponse = await fetch(`${apiUrl}/upload/multiple`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`

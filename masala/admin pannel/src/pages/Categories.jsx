@@ -97,7 +97,8 @@ const Categories = () => {
                 uploadFormData.append('image', image);
 
                 const token = localStorage.getItem('adminToken');
-                const uploadResponse = await fetch('http://localhost:5000/api/upload', {
+                const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+                const uploadResponse = await fetch(`${apiUrl}/upload`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`
