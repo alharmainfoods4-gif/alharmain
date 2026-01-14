@@ -63,9 +63,9 @@ const Products = () => {
                     categoryService.getAll()
                 ]);
 
-                // Assuming response format matches backend: { success: true, count: X, products/categories: [] }
-                setProducts(Array.isArray(productsRes) ? productsRes : (productsRes.products || []));
-                setCategories(Array.isArray(categoriesRes) ? categoriesRes : (categoriesRes.categories || []));
+                // Match backend response format: { status: "success", data: [...] }
+                setProducts(Array.isArray(productsRes) ? productsRes : (productsRes.data || productsRes.products || []));
+                setCategories(Array.isArray(categoriesRes) ? categoriesRes : (categoriesRes.data || categoriesRes.categories || []));
             } catch (error) {
                 console.error('Error fetching products/categories:', error);
                 // Fallback to empty or toast if needed

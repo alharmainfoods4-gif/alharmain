@@ -47,8 +47,9 @@ const Home = () => {
                     productService.getAll(),
                     categoryService.getAll()
                 ]);
-                setProducts(Array.isArray(prodsData) ? prodsData : (prodsData.products || []));
-                setCategories(Array.isArray(catsData) ? catsData : (catsData.categories || []));
+                // Match backend response format: { status: "success", data: [...] }
+                setProducts(Array.isArray(prodsData) ? prodsData : (prodsData.data || prodsData.products || []));
+                setCategories(Array.isArray(catsData) ? catsData : (catsData.data || catsData.categories || []));
             } catch (error) {
                 console.error('Error fetching home data:', error);
             }

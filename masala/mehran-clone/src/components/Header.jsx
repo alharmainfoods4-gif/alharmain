@@ -38,8 +38,9 @@ const Header = () => {
                     categoryService.getAll(),
                     productService.getAll()
                 ]);
-                setCategories(Array.isArray(catsData) ? catsData : (catsData.categories || []));
-                setProducts(Array.isArray(prodsData) ? prodsData : (prodsData.products || []));
+                // Match backend response format: { status: "success", data: [...] }
+                setCategories(Array.isArray(catsData) ? catsData : (catsData.data || catsData.categories || []));
+                setProducts(Array.isArray(prodsData) ? prodsData : (prodsData.data || prodsData.products || []));
             } catch (error) {
                 console.error('Error fetching header data:', error);
             }
