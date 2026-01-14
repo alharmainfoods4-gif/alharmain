@@ -39,8 +39,9 @@ export const CartProvider = ({ children }) => {
 
                     // Fetch finalized cart from backend
                     const response = await cartService.getCart();
-                    if (response.success && response.cart) {
-                        setCartItems(response.cart.items || []);
+                    const cartData = response.data?.cart || response.cart;
+                    if (cartData) {
+                        setCartItems(cartData.items || []);
                     }
                 } else {
                     // Load from localStorage for guests
@@ -89,8 +90,10 @@ export const CartProvider = ({ children }) => {
                 console.log('Sending API request to add to cart:', { productId, quantity, variantSize: selectedVariant?.size });
                 const response = await cartService.addToCart(productId, quantity, selectedVariant?.size);
                 console.log('API Response:', response);
-                if (response.success) {
-                    setCartItems(response.cart.items);
+
+                const cartData = response.data?.cart || response.cart;
+                if ((response.status === 'success' || response.success) && cartData) {
+                    setCartItems(cartData.items);
                 }
             } else {
                 console.log('Guest mode: Updating local cart');
@@ -136,8 +139,9 @@ export const CartProvider = ({ children }) => {
 
             if (isAuthenticated) {
                 const response = await cartService.updateQuantity(productId, newQty, variantSize);
-                if (response.success) {
-                    setCartItems(response.cart.items);
+                const cartData = response.data?.cart || response.cart;
+                if ((response.status === 'success' || response.success) && cartData) {
+                    setCartItems(cartData.items);
                 }
             } else {
                 if (newQty === 0) {
@@ -159,8 +163,9 @@ export const CartProvider = ({ children }) => {
         try {
             if (isAuthenticated) {
                 const response = await cartService.removeProduct(productId, variantSize);
-                if (response.success) {
-                    setCartItems(response.cart.items);
+                const cartData = response.data?.cart || response.cart;
+                if ((response.status === 'success' || response.success) && cartData) {
+                    setCartItems(cartData.items);
                 }
             } else {
                 setCartItems(prev => prev.filter(i =>
