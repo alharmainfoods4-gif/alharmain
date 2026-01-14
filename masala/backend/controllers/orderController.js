@@ -75,10 +75,14 @@ exports.createOrder = async (req, res, next) => {
 
         successResponse(res, 201, 'Order created successfully', { order });
     } catch (error) {
-        console.error('CRITICAL Order Controller Error:');
-        console.error('Name:', error.name);
-        console.error('Message:', error.message);
-        console.error('Stack:', error.stack);
+        console.error('CRITICAL Order Controller Error:', error);
+
+        // Handle Mongoose Validation Errors specifically
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(val => val.message);
+            return errorResponse(res, 400, 'Validation failed', messages);
+        }
+
         next(error);
     }
 };

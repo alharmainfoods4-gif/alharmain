@@ -82,7 +82,15 @@ const CartDrawer = () => {
                         </div>
                     ) : (
                         cartItems.map((item, idx) => {
-                            const productId = item.product?._id || item._id || item.id;
+                            // Robust ID extraction handling both populated (object) and unpopulated (string) products
+                            let productId;
+                            if (item.product && typeof item.product === 'object') {
+                                productId = item.product._id || item.product.id;
+                            } else if (typeof item.product === 'string') {
+                                productId = item.product;
+                            } else {
+                                productId = item._id || item.id;
+                            }
                             return (
                                 <div key={idx} style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', paddingBottom: '1.5rem', borderBottom: '1px solid #333' }}>
                                     <div style={{ width: '80px', height: '80px', background: '#333', borderRadius: '8px', overflow: 'hidden' }}>
