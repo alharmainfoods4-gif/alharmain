@@ -63,9 +63,12 @@ const Products = () => {
                     categoryService.getAll()
                 ]);
 
-                // Match backend response format: { status: "success", data: [...] }
-                setProducts(Array.isArray(productsRes) ? productsRes : (productsRes.data || productsRes.products || []));
-                setCategories(Array.isArray(categoriesRes) ? categoriesRes : (categoriesRes.data || categoriesRes.categories || []));
+                // Match backend response format: { status: "success", data: [...] or { status: "success", data: { products/categories: [...] } }
+                const productData = Array.isArray(productsRes) ? productsRes : (productsRes.data || productsRes.products || []);
+                setProducts(Array.isArray(productData) ? productData : (productData.products || []));
+
+                const categoryData = Array.isArray(categoriesRes) ? categoriesRes : (categoriesRes.data || categoriesRes.categories || []);
+                setCategories(Array.isArray(categoryData) ? categoryData : (categoryData.categories || []));
             } catch (error) {
                 console.error('Error fetching products/categories:', error);
                 // Fallback to empty or toast if needed
