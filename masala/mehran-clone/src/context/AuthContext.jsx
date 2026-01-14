@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
             setUser(currentUser);
         }
         setLoading(false);
+        console.log('AuthProvider initialized, loading:', false);
     }, []);
 
     const login = async (credentials) => {

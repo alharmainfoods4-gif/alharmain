@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
             }
         }
         setLoading(false);
+        console.log('Admin AuthProvider initialized, loading:', false);
     }, [token]);
 
     const login = (userData, userToken) => {
