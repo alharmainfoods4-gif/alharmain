@@ -60,5 +60,5 @@ export const API_ROUTES = {
     },
 };
 
-export const TOKEN_KEY = 'admin_token';
-export const USER_KEY = 'admin_user';
+export const TOKEN_KEY = 'auth_token';
+export const USER_KEY = 'auth_user';
