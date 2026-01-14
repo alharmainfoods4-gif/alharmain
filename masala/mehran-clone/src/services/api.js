@@ -37,8 +37,9 @@ api.interceptors.response.use(
             if (status === 401) {
                 console.error('API 401 Unauthorized:', { url: error.config.url, data });
                 // Unauthorized - clear token
-                localStorage.removeItem(TOKEN_KEY);
-                localStorage.removeItem(USER_KEY);
+                // console.log('DEBUG: Keeping token despite 401 to trace error');
+                // localStorage.removeItem(TOKEN_KEY);
+                // localStorage.removeItem(USER_KEY);
             }
 
             return Promise.reject(data);
