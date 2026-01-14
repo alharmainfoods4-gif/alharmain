@@ -17,9 +17,14 @@ const createProductValidation = [
         .trim()
         .notEmpty().withMessage('Description is required'),
 
+    // Accept either price or basePrice (both optional with default 0)
     body('price')
-        .notEmpty().withMessage('Price is required')
+        .optional()
         .isFloat({ min: 0 }).withMessage('Price must be a positive number'),
+
+    body('basePrice')
+        .optional()
+        .isFloat({ min: 0 }).withMessage('Base price must be a positive number'),
 
     body('stock')
         .optional()

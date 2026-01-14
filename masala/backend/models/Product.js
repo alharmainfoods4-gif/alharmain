@@ -60,9 +60,15 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Product description is required']
     },
+    basePrice: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    // Alias for backward compatibility
     price: {
         type: Number,
-        required: [true, 'Product price is required'],
+        default: 0,
         min: 0
     },
     variants: [variantSchema],
