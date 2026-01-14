@@ -338,7 +338,7 @@ const Products = () => {
                 detailsText = `\n\nDetails:\n${legacyDetails.join('\n')}`;
             }
 
-            alert(`${errorMsg}${detailsText}`);
+            alert(`${errorMsg}${detailsText}\n\nDEBUG RAW:\n${JSON.stringify(error, null, 2)}`);
         }
     };
 
