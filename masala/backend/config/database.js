@@ -1,30 +1,58 @@
 /**
  * MongoDB Database Configuration
+ * Optimized for Vercel Serverless Environment
  */
 
 const mongoose = require('mongoose');
 
-let isConnected = false;
+// Cache the connection across serverless invocations
+let cached = global.mongoose;
+
+if (!cached) {
+    cached = global.mongoose = { conn: null, promise: null };
+}
 
 const connectDB = async () => {
-    if (isConnected) {
-        console.log('✅ Using existing MongoDB connection');
-        return;
+    // Return cached connection if available
+    if (cached.conn) {
+        console.log('✅ Using cached MongoDB connection');
+        return cached.conn;
     }
 
-    try {
-        const conn = await mongoose.connect(process.env.MONGODB_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+    // Return pending connection promise if one exists
+    if (cached.promise) {
+        console.log('⏳ Waiting for existing connection promise');
+        cached.conn = await cached.promise;
+        return cached.conn;
+    }
 
-        isConnected = conn.connections[0].readyState === 1;
-        console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+    const MONGODB_URI = process.env.MONGODB_URI;
+
+    if (!MONGODB_URI) {
+        throw new Error('MONGODB_URI environment variable is not defined');
+    }
+
+    console.log('🔌 Creating new MongoDB connection...');
+
+    // Create connection with optimized settings for serverless
+    cached.promise = mongoose.connect(MONGODB_URI, {
+        bufferCommands: false,
+        maxPoolSize: 10,
+        serverSelectionTimeoutMS: 25000,
+        socketTimeoutMS: 45000,
+        connectTimeoutMS: 30000,
+        family: 4 // Force IPv4
+    });
+
+    try {
+        cached.conn = await cached.promise;
+        console.log(`✅ MongoDB Connected: ${cached.conn.connection.host}`);
+        return cached.conn;
     } catch (error) {
+        cached.promise = null;
         console.error(`❌ MongoDB Connection Error: ${error.message}`);
-        throw error; // Don't use process.exit in serverless!
+        throw error;
     }
 };
 
 module.exports = connectDB;
-

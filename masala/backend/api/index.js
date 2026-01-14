@@ -9,29 +9,37 @@ dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
 
 require('dotenv').config();
 
-let app;
+const express = require('express');
+const connectDB = require('../config/database');
 
-try {
-    const connectDB = require('../config/database');
-    app = require('../app');
+// Create a wrapper handler that ensures DB connection
+let appModule;
+let dbConnectionPromise = null;
 
-    // Connect to database on cold start
-    connectDB().catch(err => console.error('DB Connection Error:', err.message));
-} catch (error) {
-    console.error('Module loading error:', error);
+const handler = async (req, res) => {
+    try {
+        // Ensure database is connected
+        if (!dbConnectionPromise) {
+            dbConnectionPromise = connectDB();
+        }
+        await dbConnectionPromise;
 
-    // Return a minimal express app with error message
-    const express = require('express');
-    app = express();
-    app.use('*', (req, res) => {
-        res.status(500).json({
-            error: 'Server initialization failed',
-            message: error.message,
-            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        // Load app module after DB connection is confirmed
+        if (!appModule) {
+            appModule = require('../app');
+        }
+
+        // Handle the request
+        return appModule(req, res);
+    } catch (error) {
+        console.error('Server Error:', error.message);
+        res.status(503).json({
+            status: 'error',
+            message: 'Service temporarily unavailable',
+            details: process.env.NODE_ENV !== 'production' ? error.message : undefined
         });
-    });
-}
+    }
+};
 
-// Export the Express app as a Vercel serverless function
-module.exports = app;
-
+// Export the handler
+module.exports = handler;
