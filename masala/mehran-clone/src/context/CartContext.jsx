@@ -82,14 +82,18 @@ export const CartProvider = ({ children }) => {
     }, 0);
 
     const addToCart = async (product, quantity, selectedVariant = null) => {
+        console.log('addToCart called:', { product, quantity, selectedVariant, isAuthenticated });
         try {
             if (isAuthenticated) {
                 const productId = product._id || product.id;
+                console.log('Sending API request to add to cart:', { productId, quantity, variantSize: selectedVariant?.size });
                 const response = await cartService.addToCart(productId, quantity, selectedVariant?.size);
+                console.log('API Response:', response);
                 if (response.success) {
                     setCartItems(response.cart.items);
                 }
             } else {
+                console.log('Guest mode: Updating local cart');
                 // Local state update for guests
                 setCartItems(prev => {
                     const existing = prev.find(item =>
