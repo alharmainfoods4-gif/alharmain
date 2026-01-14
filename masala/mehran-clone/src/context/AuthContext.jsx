@@ -13,7 +13,10 @@ export const AuthProvider = ({ children }) => {
         // Check if user is already logged in
         const currentUser = authService.getCurrentUser();
         if (currentUser) {
+            console.log('AuthContext: User restored from storage:', currentUser);
             setUser(currentUser);
+        } else {
+            console.log('AuthContext: No user in storage');
         }
         setLoading(false);
         console.log('AuthProvider initialized, loading:', false);

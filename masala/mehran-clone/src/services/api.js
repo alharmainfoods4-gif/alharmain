@@ -15,6 +15,9 @@ api.interceptors.request.use(
         const token = localStorage.getItem(TOKEN_KEY);
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
+            console.log('API Request:', config.url, 'Token attached:', token.substring(0, 10) + '...');
+        } else {
+            console.log('API Request:', config.url, 'No token found');
         }
         return config;
     },
@@ -32,6 +35,7 @@ api.interceptors.response.use(
             const { status, data } = error.response;
 
             if (status === 401) {
+                console.error('API 401 Unauthorized:', { url: error.config.url, data });
                 // Unauthorized - clear token
                 localStorage.removeItem(TOKEN_KEY);
                 localStorage.removeItem(USER_KEY);
