@@ -11,9 +11,8 @@ import productService from '../services/product.service';
 import './Header.css';
 
 const Header = () => {
-    const { user, logout } = useContext(AuthContext);
+    const { user, logout, isAuthModalOpen, setIsAuthModalOpen } = useContext(AuthContext);
     const { cartCount, setIsCartOpen } = useContext(CartContext);
-    const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -154,10 +153,10 @@ const Header = () => {
                                     />
                                 </div>
                             ) : (
-                                <FaUser onClick={() => setIsAuthOpen(true)} style={{ cursor: 'pointer', fontSize: '1.2rem' }} />
+                                <FaUser onClick={() => setIsAuthModalOpen(true)} style={{ cursor: 'pointer', fontSize: '1.2rem' }} />
                             )}
                         </div>
-                        <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+                        <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
                         <div onClick={() => setIsCartOpen(true)} style={{ position: 'relative', cursor: 'pointer' }}>
                             <FaShoppingCart style={{ fontSize: '1.2rem' }} />
                             {cartCount > 0 && <span style={{

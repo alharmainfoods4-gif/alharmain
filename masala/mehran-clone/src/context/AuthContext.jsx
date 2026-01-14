@@ -6,7 +6,7 @@ export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
     useEffect(() => {
         // Check if user is already logged in
@@ -46,6 +46,8 @@ export const AuthProvider = ({ children }) => {
     const value = {
         user,
         loading,
+        isAuthModalOpen,
+        setIsAuthModalOpen,
         login,
         register,
         logout,

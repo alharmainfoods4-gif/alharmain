@@ -1,10 +1,11 @@
 import React, { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaTimes, FaTrash, FaMinus, FaPlus } from 'react-icons/fa';
-import { CartContext } from '../context/CartContext';
+import { AuthContext } from '../context/AuthContext';
 
 const CartDrawer = () => {
     const { isCartOpen, setIsCartOpen, cartItems, updateQuantity, removeItem, subTotal, setShowCheckoutModal } = useContext(CartContext);
+    const { isAuthenticated, setIsAuthModalOpen } = useContext(AuthContext);
     const navigate = useNavigate();
     // Prevent body scroll when drawer is open
     useEffect(() => {
@@ -141,6 +142,10 @@ const CartDrawer = () => {
                         <button
                             onClick={() => {
                                 setIsCartOpen(false);
+                                if (!isAuthenticated) {
+                                    setIsAuthModalOpen(true);
+                                    return;
+                                }
                                 // Open checkout modal instead of navigating
                                 setTimeout(() => {
                                     setShowCheckoutModal(true);
