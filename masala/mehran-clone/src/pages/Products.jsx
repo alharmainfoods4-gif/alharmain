@@ -274,7 +274,7 @@ const Products = () => {
             };
 
             const response = await orderService.create(orderData);
-            const orderNumber = response.order?.orderNumber || 'N/A';
+            const orderNumber = response.data?.order?.orderNumber || response.order?.orderNumber || 'N/A';
 
             // Show success message with customer info
             setOrderSummary({
