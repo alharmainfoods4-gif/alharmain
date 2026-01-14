@@ -23,9 +23,21 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (credentials) => {
-        const data = await authService.login(credentials);
-        setUser(data.user);
-        return data;
+        console.log('AuthContext: Calling login service');
+        try {
+            const data = await authService.login(credentials);
+            console.log('AuthContext: Service returned:', data);
+            if (data.user) {
+                console.log('AuthContext: Setting user state:', data.user);
+                setUser(data.user);
+            } else {
+                console.error('AuthContext: No user in login data');
+            }
+            return data;
+        } catch (error) {
+            console.error('AuthContext: Login error', error);
+            throw error;
+        }
     };
 
     const register = async (userData) => {

@@ -11,11 +11,16 @@ const authService = {
     // Login user
     login: async (credentials) => {
         const response = await api.post(API_ROUTES.AUTH.LOGIN, credentials);
+        console.log('AuthService: Login response:', response.data);
         const { token, user } = response.data;
 
-        // Store token and user in localStorage
-        localStorage.setItem(TOKEN_KEY, token);
-        localStorage.setItem(USER_KEY, JSON.stringify(user));
+        if (token && user) {
+            console.log('AuthService: Saving to localStorage', { TOKEN_KEY, USER_KEY });
+            localStorage.setItem(TOKEN_KEY, token);
+            localStorage.setItem(USER_KEY, JSON.stringify(user));
+        } else {
+            console.error('AuthService: Missing token or user in response', { token, user });
+        }
 
         return response.data;
     },
