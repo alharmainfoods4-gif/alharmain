@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaTimes, FaTrash, FaMinus, FaPlus } from 'react-icons/fa';
 import { AuthContext } from '../context/AuthContext';
+import { CartContext } from '../context/CartContext';
 
 const CartDrawer = () => {
     const { isCartOpen, setIsCartOpen, cartItems, updateQuantity, removeItem, subTotal, setShowCheckoutModal } = useContext(CartContext);
