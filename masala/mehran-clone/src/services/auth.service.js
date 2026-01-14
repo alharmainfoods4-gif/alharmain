@@ -24,7 +24,7 @@ const authService = {
             console.error('AuthService: Missing token or user in response', { token, user });
         }
 
-        return response.data;
+        return { ...response.data, user };
     },
 
     // Logout user
