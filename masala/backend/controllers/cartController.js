@@ -40,7 +40,7 @@ exports.addToCart = async (req, res, next) => {
             return errorResponse(res, 404, 'Product not found');
         }
 
-        let price = product.price;
+        let price = product.price || product.basePrice;
         let variant = null;
 
         // Check variant if specified
@@ -145,6 +145,7 @@ exports.removeFromCart = async (req, res, next) => {
         );
 
         await cart.save();
+        await cart.populate('items.product', 'name price images stock');
 
         successResponse(res, 200, 'Item removed from cart', { cart });
     } catch (error) {
