@@ -12,7 +12,9 @@ const authService = {
     login: async (credentials) => {
         const response = await api.post(API_ROUTES.AUTH.LOGIN, credentials);
         console.log('AuthService: Login response:', response.data);
-        const { token, user } = response.data;
+        const { token } = response.data;
+        // Handle different response structures (root user vs nested in data)
+        const user = response.data.user || (response.data.data && response.data.data.user);
 
         if (token && user) {
             console.log('AuthService: Saving to localStorage', { TOKEN_KEY, USER_KEY });

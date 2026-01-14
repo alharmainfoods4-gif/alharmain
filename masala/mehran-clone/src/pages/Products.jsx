@@ -174,18 +174,24 @@ const Products = () => {
     });
 
     // Animate cards on filter change
+    // Animate cards on filter change
     useEffect(() => {
+        if (loading) return;
+
         if (!selectedProduct) {
-            gsap.fromTo(".product-card-anim",
-                { y: 30, opacity: 0 },
-                { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: "power2.out", overwrite: true }
-            );
+            const targets = document.querySelectorAll(".product-card-anim");
+            if (targets.length > 0) {
+                gsap.fromTo(targets,
+                    { y: 30, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: "power2.out", overwrite: true }
+                );
+            }
         } else {
             // Reset selected variant when product changes to first available or null
             setSelectedVariant(selectedProduct.variants?.[0] || null);
             setQuantity(1); // Also reset quantity to 1
         }
-    }, [selectedCategory, selectedProduct]);
+    }, [selectedCategory, selectedProduct, loading]);
 
     // Handle Add to Compare
     const toggleCompare = (e, product) => {
