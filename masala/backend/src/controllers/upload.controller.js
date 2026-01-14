@@ -1,10 +1,9 @@
 /**
  * Upload Controller
- * Cloudinary image upload
+ * Cloudinary image upload - Optimized for Serverless
  */
 
 const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
 
 // Configure Cloudinary
 cloudinary.config({
@@ -12,6 +11,28 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+/**
+ * Upload buffer to Cloudinary using stream
+ */
+const uploadBufferToCloudinary = (buffer, folder) => {
+    return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+            {
+                folder: folder,
+                transformation: [
+                    { width: 1000, height: 1000, crop: 'limit' },
+                    { quality: 'auto' }
+                ]
+            },
+            (error, result) => {
+                if (error) reject(error);
+                else resolve(result);
+            }
+        );
+        uploadStream.end(buffer);
+    });
+};
 
 /**
  * @route   POST /api/upload
@@ -27,17 +48,8 @@ exports.uploadSingle = async (req, res) => {
             });
         }
 
-        // Upload to Cloudinary
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: 'al-harmain/products',
-            transformation: [
-                { width: 1000, height: 1000, crop: 'limit' },
-                { quality: 'auto' }
-            ]
-        });
-
-        // Delete local file
-        fs.unlinkSync(req.file.path);
+        // Upload to Cloudinary using buffer (serverless compatible)
+        const result = await uploadBufferToCloudinary(req.file.buffer, 'al-harmain/products');
 
         res.json({
             success: true,
@@ -47,11 +59,6 @@ exports.uploadSingle = async (req, res) => {
         });
 
     } catch (error) {
-        // Delete local file if upload fails
-        if (req.file && fs.existsSync(req.file.path)) {
-            fs.unlinkSync(req.file.path);
-        }
-
         console.error('Upload Error:', error);
         res.status(500).json({
             success: false,
@@ -76,19 +83,11 @@ exports.uploadMultiple = async (req, res) => {
         }
 
         const uploadPromises = req.files.map(file =>
-            cloudinary.uploader.upload(file.path, {
-                folder: 'al-harmain/products',
-                transformation: [
-                    { width: 1000, height: 1000, crop: 'limit' },
-                    { quality: 'auto' }
-                ]
-            }).then(result => {
-                fs.unlinkSync(file.path);
-                return {
+            uploadBufferToCloudinary(file.buffer, 'al-harmain/products')
+                .then(result => ({
                     url: result.secure_url,
                     publicId: result.public_id
-                };
-            })
+                }))
         );
 
         const results = await Promise.all(uploadPromises);
@@ -100,15 +99,6 @@ exports.uploadMultiple = async (req, res) => {
         });
 
     } catch (error) {
-        // Delete local files if upload fails
-        if (req.files) {
-            req.files.forEach(file => {
-                if (fs.existsSync(file.path)) {
-                    fs.unlinkSync(file.path);
-                }
-            });
-        }
-
         console.error('Upload Multiple Error:', error);
         res.status(500).json({
             success: false,

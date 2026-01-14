@@ -1,6 +1,7 @@
 /**
  * Upload Routes
- * Image upload using Multer + Cloudinary
+ * Image upload using Multer (Memory Storage) + Cloudinary
+ * Optimized for Vercel Serverless
  */
 
 const express = require('express');
@@ -9,18 +10,11 @@ const multer = require('multer');
 const path = require('path');
 const { protect } = require('../middlewares/auth');
 const { authorize } = require('../middlewares/roleCheck');
-const { uploadImage, uploadMultipleImages } = require('../services/uploadService');
+const { uploadImageBuffer, uploadMultipleImageBuffers } = require('../services/uploadService');
 const { successResponse, errorResponse } = require('../utils/responseFormatter');
 
-// Configure multer for file upload
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'backend/uploads/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`);
-    }
-});
+// Configure multer with MEMORY storage (for serverless compatibility)
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|webp/;
@@ -51,10 +45,12 @@ router.post('/', protect, authorize('admin'), upload.single('image'), async (req
             return errorResponse(res, 400, 'Please upload an image');
         }
 
-        const result = await uploadImage(req.file.path, 'products');
+        // Use buffer upload for serverless
+        const result = await uploadImageBuffer(req.file.buffer, 'products');
 
         successResponse(res, 200, 'Image uploaded successfully', result);
     } catch (error) {
+        console.error('Upload error:', error);
         next(error);
     }
 });
@@ -70,11 +66,13 @@ router.post('/multiple', protect, authorize('admin'), upload.array('images', 5),
             return errorResponse(res, 400, 'Please upload at least one image');
         }
 
-        const filePaths = req.files.map(file => file.path);
-        const results = await uploadMultipleImages(filePaths, 'products');
+        // Extract buffers and upload
+        const buffers = req.files.map(file => file.buffer);
+        const results = await uploadMultipleImageBuffers(buffers, 'products');
 
         successResponse(res, 200, 'Images uploaded successfully', { images: results });
     } catch (error) {
+        console.error('Multiple upload error:', error);
         next(error);
     }
 });
