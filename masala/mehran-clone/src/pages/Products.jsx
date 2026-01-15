@@ -429,12 +429,18 @@ const Products = () => {
                                                 setSelectedProduct(product);
                                                 try {
                                                     // Fetch full details including reviews
-                                                    console.log('Submitting Order Data [V2-DEBUG]:', JSON.stringify(orderData, null, 2));
                                                     console.log('Fetching full details for:', product.slug);
                                                     const fullProduct = await productService.getBySlug(product.slug);
                                                     console.log('Full product details:', fullProduct);
-                                                    if (fullProduct && (fullProduct.product || fullProduct.data)) {
-                                                        setSelectedProduct(fullProduct.product || fullProduct.data);
+
+                                                    // Handle various response structures:
+                                                    // 1. { data: { product: {...} } } - Standard API response
+                                                    // 2. { product: {...} } - Direct object
+                                                    // 3. { ...productFields } - Flat object
+                                                    const actualProduct = fullProduct.data?.product || fullProduct.product || fullProduct.data || fullProduct;
+
+                                                    if (actualProduct) {
+                                                        setSelectedProduct(actualProduct);
                                                     }
                                                 } catch (err) {
                                                     console.error('Error fetching full product details:', err);
