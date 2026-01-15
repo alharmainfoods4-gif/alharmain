@@ -111,6 +111,10 @@ const productSchema = new mongoose.Schema({
     isFeatured: {
         type: Boolean,
         default: false
+    },
+    isGiftBox: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

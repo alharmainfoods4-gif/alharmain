@@ -42,6 +42,11 @@ exports.getProducts = async (req, res, next) => {
             query.isFeatured = true;
         }
 
+        // Filter by isGiftBox
+        if (req.query.isGiftBox !== undefined) {
+            query.isGiftBox = req.query.isGiftBox === 'true';
+        }
+
         // Sort
         let sort = {};
         if (req.query.sort) {
