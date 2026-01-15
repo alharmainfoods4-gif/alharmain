@@ -347,8 +347,12 @@ const Products = () => {
             console.error('Error creating order:', error);
             
             let displayMsg = 'Failed to place order';
-            if (error.response?.data) {
-                const { message, details, errors } = error.response.data;
+            
+            // Handle unwrapped error from api.js interceptor
+            const errorData = error.response?.data || error;
+            
+            if (errorData) {
+                const { message, details, errors } = errorData;
                 displayMsg = message || displayMsg;
                 
                 if (Array.isArray(errors) && errors.length > 0) {
@@ -357,7 +361,7 @@ const Products = () => {
                     displayMsg += `\n\n${Array.isArray(details) ? details.join('\n') : details}`;
                 }
             } else {
-                displayMsg = error.message;
+                displayMsg = error.message || String(error);
             }
 
             alert(displayMsg);
