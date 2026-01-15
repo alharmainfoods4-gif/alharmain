@@ -345,18 +345,18 @@ const Products = () => {
 
         } catch (error) {
             console.error('Error creating order:', error);
-            
+
             let displayMsg = 'Failed to place order';
-            
+
             // Handle unwrapped error from api.js interceptor
             const errorData = error.response?.data || error;
-            
+
             if (errorData) {
                 const { message, details, errors } = errorData;
                 displayMsg = message || displayMsg;
-                
+
                 if (Array.isArray(errors) && errors.length > 0) {
-                    displayMsg += `\n\nValidation Errors:\n- ${errors.join('\n- ')}`;
+                    displayMsg += `\n\nValidation Errors:\n- ${errors.map(e => typeof e === 'object' ? (e.message || JSON.stringify(e)) : e).join('\n- ')}`;
                 } else if (details) {
                     displayMsg += `\n\n${Array.isArray(details) ? details.join('\n') : details}`;
                 }
