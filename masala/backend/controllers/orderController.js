@@ -83,6 +83,11 @@ exports.createOrder = async (req, res, next) => {
             return errorResponse(res, 400, 'Validation failed', messages);
         }
 
+        // Handle CastError (invalid ID format)
+        if (error.name === 'CastError') {
+            return errorResponse(res, 400, `Invalid ID format for field ${error.path}: ${error.value}`);
+        }
+
         next(error);
     }
 };
