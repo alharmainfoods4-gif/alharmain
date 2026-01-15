@@ -4,6 +4,7 @@
  */
 
 const Product = require('../models/Product');
+const Category = require('../models/Category');
 const { successResponse, errorResponse, paginatedResponse } = require('../utils/responseFormatter');
 
 /**
@@ -117,12 +118,30 @@ exports.getProduct = async (req, res, next) => {
  * @desc    Create product (Admin only)
  * @access  Private/Admin
  */
+const Product = require('../models/Product');
+const Category = require('../models/Category');
+const { successResponse, errorResponse, paginatedResponse } = require('../utils/responseFormatter');
+
+// ... (existing code) ...
+
 exports.createProduct = async (req, res, next) => {
     try {
         console.log('[createProduct] Incoming Request Body:', JSON.stringify(req.body, null, 2));
 
         // Force removal of slug to ensure auto-generation works
         delete req.body.slug;
+
+        // Auto-detect Gift Box based on Category
+        if (req.body.category) {
+            const category = await Category.findById(req.body.category);
+            if (category) {
+                console.log(`[createProduct] Category found: ${category.name} (${category.slug})`);
+                if (category.slug === 'gift-boxes' || category.slug === 'gift-box' || category.name.toLowerCase().includes('gift box')) {
+                    console.log('[createProduct] Auto-setting isGiftBox = true based on category');
+                    req.body.isGiftBox = true;
+                }
+            }
+        }
 
         const product = await Product.create(req.body);
 
