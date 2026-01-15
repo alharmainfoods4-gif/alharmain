@@ -282,7 +282,6 @@ const Products = () => {
                 notes: checkoutData.notes
             };
 
-            console.log('Submitting Order Data:', JSON.stringify(orderData, null, 2));
             const response = await orderService.create(orderData);
             const orderNumber = response.data?.order?.orderNumber || response.order?.orderNumber || 'N/A';
 
@@ -322,23 +321,9 @@ const Products = () => {
 
         } catch (error) {
             console.error('Error creating order:', error);
-
-            // The API interceptor unwraps the response, so 'error' IS the data object
-            const errorMsg = error.message || 'Failed to place order';
-
-            // Handle both 'details' (legacy) and 'errors' (new validation format)
-            // Check direct properties since interceptor returns data
-            const validationErrors = error.errors || error.response?.data?.errors;
-            const legacyDetails = error.details || error.response?.data?.details;
-
-            let detailsText = '';
-            if (validationErrors && Array.isArray(validationErrors)) {
-                detailsText = `\n\nIssues:\n- ${validationErrors.join('\n- ')}`;
-            } else if (legacyDetails && Array.isArray(legacyDetails)) {
-                detailsText = `\n\nDetails:\n${legacyDetails.join('\n')}`;
-            }
-
-            alert(`${errorMsg}${detailsText}\n\nDEBUG RAW:\n${JSON.stringify(error, null, 2)}`);
+            const errorMsg = error.response?.data?.message || error.message || 'Failed to place order';
+            const details = error.response?.data?.details ? `\n\nDetails:\n${error.response.data.details.join('\n')}` : '';
+            alert(`${errorMsg}${details}`);
         }
     };
 
@@ -444,6 +429,7 @@ const Products = () => {
                                                 setSelectedProduct(product);
                                                 try {
                                                     // Fetch full details including reviews
+                                                    console.log('Submitting Order Data [V2-DEBUG]:', JSON.stringify(orderData, null, 2));
                                                     console.log('Fetching full details for:', product.slug);
                                                     const fullProduct = await productService.getBySlug(product.slug);
                                                     console.log('Full product details:', fullProduct);
