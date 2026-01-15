@@ -143,6 +143,13 @@ exports.createProduct = async (req, res, next) => {
             }
         }
 
+        // Auto-detect Gift Box based on Referer (Admin Panel Context)
+        const referer = req.get('Referer') || '';
+        if (referer.includes('/gift-boxes') || referer.includes('gift-box')) {
+            console.log('[createProduct] Detected Gift Box page via Referer. Setting isGiftBox = true');
+            req.body.isGiftBox = true;
+        }
+
         const product = await Product.create(req.body);
 
         successResponse(res, 201, 'Product created successfully', { product });
