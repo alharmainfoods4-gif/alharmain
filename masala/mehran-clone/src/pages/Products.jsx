@@ -244,9 +244,31 @@ const Products = () => {
             return;
         }
 
+        // Validate Product Selection
+        if (!selectedProduct) {
+            alert("Error: No product selected.");
+            return;
+        }
+
+        const productId = selectedProduct._id || selectedProduct.id;
+        if (!productId) {
+            console.error("Critical Error: Product ID missing in selectedProduct:", selectedProduct);
+            alert(`System Error: Selected product data is incomplete (ID missing).\nPlease refresh the page and try again.\n\nDebug Info: ${JSON.stringify(selectedProduct, null, 2)}`);
+            return;
+        }
+
         try {
             // Calculate total using variant price
             const itemPrice = selectedVariant ? selectedVariant.price : (selectedProduct.basePrice || selectedProduct.price);
+
+            // Log for debugging
+            console.log("Preparing Order Payload:", {
+                productId,
+                name: selectedProduct.name,
+                price: itemPrice,
+                variant: selectedVariant
+            });
+
             const subTotal = itemPrice * quantity;
             const shipping = 300;
             const gst = Math.round((subTotal + shipping) * 0.10);
@@ -255,7 +277,7 @@ const Products = () => {
             // Prepare order data for backend
             const orderData = {
                 items: [{
-                    product: selectedProduct._id || selectedProduct.id,
+                    product: productId,
                     name: selectedProduct.name,
                     price: itemPrice,
                     quantity: quantity,
@@ -284,6 +306,8 @@ const Products = () => {
 
             const response = await orderService.create(orderData);
             const orderNumber = response.data?.order?.orderNumber || response.order?.orderNumber || 'N/A';
+
+            // ... strict validation logic continues ...
 
             // Show success message with customer info
             setOrderSummary({
@@ -321,9 +345,22 @@ const Products = () => {
 
         } catch (error) {
             console.error('Error creating order:', error);
-            const errorMsg = error.response?.data?.message || error.message || 'Failed to place order';
-            const details = error.response?.data?.details ? `\n\nDetails:\n${error.response.data.details.join('\n')}` : '';
-            alert(`${errorMsg}${details}`);
+            
+            let displayMsg = 'Failed to place order';
+            if (error.response?.data) {
+                const { message, details, errors } = error.response.data;
+                displayMsg = message || displayMsg;
+                
+                if (Array.isArray(errors) && errors.length > 0) {
+                    displayMsg += `\n\nValidation Errors:\n- ${errors.join('\n- ')}`;
+                } else if (details) {
+                    displayMsg += `\n\n${Array.isArray(details) ? details.join('\n') : details}`;
+                }
+            } else {
+                displayMsg = error.message;
+            }
+
+            alert(displayMsg);
         }
     };
 
