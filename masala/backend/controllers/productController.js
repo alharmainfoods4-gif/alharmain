@@ -119,6 +119,9 @@ exports.getProduct = async (req, res, next) => {
  */
 exports.createProduct = async (req, res, next) => {
     try {
+        // Force removal of slug to ensure auto-generation works
+        delete req.body.slug;
+
         const product = await Product.create(req.body);
 
         successResponse(res, 201, 'Product created successfully', { product });
