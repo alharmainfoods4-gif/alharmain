@@ -115,6 +115,10 @@ const productSchema = new mongoose.Schema({
     isGiftBox: {
         type: Boolean,
         default: false
+    },
+    slug: {
+        type: String,
+        unique: true
     }
 }, {
     timestamps: true
@@ -131,5 +135,33 @@ productSchema.methods.updateRating = function () {
         this.numReviews = this.reviews.length;
     }
 };
+
+// Generate slug before saving
+productSchema.pre('save', async function (next) {
+    if (!this.isModified('name')) return next();
+
+    // Simple slug generator
+    const slug = this.name
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '-')
+        .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+        .replace(/^-|-$/g, ''); // Trim hyphens
+
+    // Ensure uniqueness
+    let uniqueSlug = slug;
+    let counter = 1;
+
+    // Check if slug exists (excluding current document)
+    // We need to access the model constructor to query
+    const Model = this.constructor;
+
+    while (await Model.findOne({ slug: uniqueSlug, _id: { $ne: this._id } })) {
+        uniqueSlug = `${slug}-${counter}`;
+        counter++;
+    }
+
+    this.slug = uniqueSlug;
+    next();
+});
 
 module.exports = mongoose.models.Product || mongoose.model('Product', productSchema);

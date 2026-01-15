@@ -169,8 +169,15 @@ const Products = () => {
 
     // Filter Logic
     const filteredProducts = products.filter(p => {
+        // 1. Category Filter
         const matchesCategory = !selectedCategory || p.category?.name === selectedCategory || p.category === selectedCategory;
-        return matchesCategory;
+
+        // 2. Gift Box Filter (Strict)
+        // If we are on Gift Box page, ONLY show items with isGiftBox === true
+        // If we are NOT on Gift Box page, ONLY show items with isGiftBox !== true (false or undefined)
+        const matchesType = isGiftBox ? (p.isGiftBox === true) : (p.isGiftBox !== true);
+
+        return matchesCategory && matchesType;
     });
 
     // Animate cards on filter change
