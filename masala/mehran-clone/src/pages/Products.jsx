@@ -15,7 +15,7 @@ import './Products.css';
 gsap.registerPlugin(ScrollTrigger);
 
 const Products = () => {
-    const { addToCart, setIsGiftBoxOrder } = useContext(CartContext);
+    const { addToCart, setIsGiftBoxOrder, clearCart } = useContext(CartContext);
     const { user, isAuthenticated } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
@@ -340,7 +340,12 @@ const Products = () => {
                 notes: ''
             });
             // Clear cart and show success alert
-            clearCart();
+            if (typeof clearCart === 'function') {
+                console.log('Clearing cart after successful order...');
+                clearCart();
+            } else {
+                console.warn('clearCart function not available in context');
+            }
             alert(`Order Placed Successfully!${isGiftBox ? '\n(Gift Boxes included in your order)' : ''}\nOrder Number: ${orderNumber}`);
 
         } catch (error) {

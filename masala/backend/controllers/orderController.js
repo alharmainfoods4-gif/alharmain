@@ -80,7 +80,6 @@ exports.createOrder = async (req, res, next) => {
         // Handle Mongoose Validation Errors specifically
         if (error.name === 'ValidationError') {
             const messages = Object.values(error.errors).map(val => val.message);
-            console.log('Validation Errors Triggered:', messages);
             return errorResponse(res, 400, 'Validation failed', messages);
         }
 
