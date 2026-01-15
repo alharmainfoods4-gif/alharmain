@@ -119,6 +119,8 @@ exports.getProduct = async (req, res, next) => {
  */
 exports.createProduct = async (req, res, next) => {
     try {
+        console.log('[createProduct] Incoming Request Body:', JSON.stringify(req.body, null, 2));
+
         // Force removal of slug to ensure auto-generation works
         delete req.body.slug;
 
