@@ -82,9 +82,20 @@ exports.getProducts = async (req, res, next) => {
  */
 exports.getProduct = async (req, res, next) => {
     try {
-        const product = await Product.findById(req.params.id)
-            .populate('category', 'name slug')
-            .populate('reviews.user', 'name');
+        let product;
+        const id = req.params.id;
+
+        // Check if id is a valid mongoose ObjectId
+        if (id.match(/^[0-9a-fA-F]{24}$/)) {
+            product = await Product.findById(id)
+                .populate('category', 'name slug')
+                .populate('reviews.user', 'name');
+        } else {
+            // If not ObjectId, try finding by slug
+            product = await Product.findOne({ slug: id })
+                .populate('category', 'name slug')
+                .populate('reviews.user', 'name');
+        }
 
         if (!product) {
             return errorResponse(res, 404, 'Product not found');
