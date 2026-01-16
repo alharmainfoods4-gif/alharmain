@@ -5,95 +5,104 @@
 
 const Product = require('../models/Product');
 const { successResponse, errorResponse, paginatedResponse } = require('../utils/responseFormatter');
+const jwt = require('jsonwebtoken'); // Import at top
+const User = require('../models/User'); // Import at top
 
 /**
  * @route   GET /api/products
  * @desc    Get all products with filtering, sorting, pagination
  * @access  Public
  */
-// Check for admin access manually since this is a public route
-let isAdmin = false;
-if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+exports.getProducts = async (req, res, next) => {
     try {
-        const token = req.headers.authorization.split(' ')[1];
-        const jwt = require('jsonwebtoken'); // Import here to avoid top-level dependency if not needed elsewhere
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        // Simple check: if token is valid and decoding works, we assume admin for now (or fetch user to be sure)
-        // For robustness, fetch user role if needed, but for listing, valid token implies authorised context
-        const User = require('../models/User');
-        const user = await User.findById(decoded.id);
-        if (user && user.role === 'admin') {
-            isAdmin = true;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 12;
+        const skip = (page - 1) * limit;
+
+        // Check for admin access manually since this is a public route
+        let isAdmin = false;
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            try {
+                const token = req.headers.authorization.split(' ')[1];
+                if (token) {
+                    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+                    if (decoded && decoded.id) {
+                        const user = await User.findById(decoded.id);
+                        if (user && user.role === 'admin') {
+                            isAdmin = true;
+                        }
+                    }
+                }
+            } catch (err) {
+                // Token verification failed - treating as normal user
+                // console.log('Public route token check failed:', err.message);
+            }
         }
-    } catch (err) {
-        // Ignore token errors on public route
-    }
-}
 
-// Build query
-let query = {};
-if (!isAdmin) {
-    query.isActive = true;
-}
+        // Build query
+        let query = {};
+        if (!isAdmin) {
+            query.isActive = true;
+        }
 
-// Filter by category
-if (req.query.category) {
-    query.category = req.query.category;
-}
+        // Filter by category
+        if (req.query.category) {
+            query.category = req.query.category;
+        }
 
-// Search by name
-if (req.query.search) {
-    query.name = { $regex: req.query.search, $options: 'i' };
-}
+        // Search by name
+        if (req.query.search) {
+            query.name = { $regex: req.query.search, $options: 'i' };
+        }
 
-// Filter by price range
-if (req.query.minPrice || req.query.maxPrice) {
-    query.price = {};
-    if (req.query.minPrice) query.price.$gte = parseInt(req.query.minPrice);
-    if (req.query.maxPrice) query.price.$lte = parseInt(req.query.maxPrice);
-}
+        // Filter by price range
+        if (req.query.minPrice || req.query.maxPrice) {
+            query.price = {};
+            if (req.query.minPrice) query.price.$gte = parseInt(req.query.minPrice);
+            if (req.query.maxPrice) query.price.$lte = parseInt(req.query.maxPrice);
+        }
 
-// Featured products
-if (req.query.featured === 'true') {
-    query.isFeatured = true;
-}
+        // Featured products
+        if (req.query.featured === 'true') {
+            query.isFeatured = true;
+        }
 
-// Filter by isGiftBox
-if (req.query.isGiftBox !== undefined) {
-    const isGiftBox = req.query.isGiftBox === 'true';
-    query.isGiftBox = isGiftBox ? true : { $ne: true };
-}
+        // Filter by isGiftBox
+        if (req.query.isGiftBox !== undefined) {
+            const isGiftBox = req.query.isGiftBox === 'true';
+            query.isGiftBox = isGiftBox ? true : { $ne: true };
+        }
 
-// Sort
-let sort = {};
-if (req.query.sort) {
-    const sortField = req.query.sort;
-    sort[sortField] = req.query.order === 'desc' ? -1 : 1;
-} else {
-    sort.createdAt = -1; // Default: newest first
-}
+        // Sort
+        let sort = {};
+        if (req.query.sort) {
+            const sortField = req.query.sort;
+            sort[sortField] = req.query.order === 'desc' ? -1 : 1;
+        } else {
+            sort.createdAt = -1; // Default: newest first
+        }
 
-const products = await Product.find(query)
-    .populate('category', 'name slug')
-    .sort(sort)
-    .limit(limit)
-    .skip(skip);
+        const products = await Product.find(query)
+            .populate('category', 'name slug')
+            .sort(sort)
+            .limit(limit)
+            .skip(skip);
 
-console.log(`[getProducts] Fetched ${products.length} products`);
-if (products.length > 0) {
-    const productsWithReviews = products.filter(p => p.reviews && p.reviews.length > 0);
-    console.log(`[getProducts] Products with reviews: ${productsWithReviews.length}`);
-    if (productsWithReviews.length > 0) {
-        console.log(`[getProducts] First product reviews:`, JSON.stringify(productsWithReviews[0].reviews, null, 2));
-    }
-}
+        console.log(`[getProducts] Fetched ${products.length} products`);
+        if (products.length > 0) {
+            const productsWithReviews = products.filter(p => p.reviews && p.reviews.length > 0);
+            console.log(`[getProducts] Products with reviews: ${productsWithReviews.length}`);
+            if (productsWithReviews.length > 0) {
+                console.log(`[getProducts] First product reviews:`, JSON.stringify(productsWithReviews[0].reviews, null, 2));
+            }
+        }
 
-const total = await Product.countDocuments(query);
+        const total = await Product.countDocuments(query);
 
-paginatedResponse(res, 200, { products }, page, limit, total);
+        paginatedResponse(res, 200, { products }, page, limit, total);
     } catch (error) {
-    next(error);
-}
+        next(error);
+    }
 };
 
 /**
