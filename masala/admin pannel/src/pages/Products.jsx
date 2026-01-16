@@ -20,7 +20,7 @@ const Products = () => {
             // Handle both array and object (nested or flat) responses
             const productList = Array.isArray(response)
                 ? response
-                : (response.data || response.products || []);
+                : (response.data?.products || response.products || (Array.isArray(response.data) ? response.data : []));
             setProducts(productList);
             setError(null);
         } catch (err) {
