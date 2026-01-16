@@ -1,46 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { Loader2, Star, MessageSquare } from 'lucide-react';
+import { Loader2, Star, MessageSquare, Pencil, Trash2 } from 'lucide-react';
 import DataTable from '../components/DataTable';
+import Modal from '../components/Modal';
+import FormInput from '../components/FormInput';
 import { api } from '../utils/api';
 
 const Reviews = () => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [debugInfo, setDebugInfo] = useState({ products: 0, reviews: 0, error: null, sample: null });
+    const [debugInfo, setDebugInfo] = useState({ products: 0, reviews: 0, error: null });
+
+    // Edit Modal State
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editingReview, setEditingReview] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        rating: 5,
+        comment: ''
+    });
 
     const fetchReviews = async () => {
         setLoading(true);
         try {
-            // Fetch all products to get their reviews
             const response = await api.get('/products?limit=1000&includeReviews=true');
-            console.log('API Response:', response);
-            // Handle { status: 'success', data: [...] } or direct array
             // Handle { status: 'success', data: { products: [...] } }
-            // api.js returns data object. If controller returns { products: [...] } inside data...
-            // We need to dig deeper.
             const products = Array.isArray(response)
                 ? response
                 : (response.data?.products || response.products || (Array.isArray(response.data) ? response.data : []));
-            console.log('Products fetched:', products.length);
 
-            // Extract reviews from all products
             const allReviews = products.flatMap(product =>
                 (product.reviews || []).map(review => ({
                     ...review,
                     productName: product.name,
                     productImage: product.images?.[0] || product.image,
                     productId: product._id || product.id,
-                    // Ensure ID is unique for key
                     _id: review._id || `${product._id}-${Math.random()}`
                 }))
             );
-            console.log('Total reviews extracted:', allReviews.length);
 
-            // Sort by date descending
             allReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
             setDebugInfo({ products: products.length, reviews: allReviews.length, error: null });
-
             setReviews(allReviews);
         } catch (error) {
             console.error('Error fetching reviews:', error);
@@ -53,6 +53,46 @@ const Reviews = () => {
     useEffect(() => {
         fetchReviews();
     }, []);
+
+    const handleDelete = async (review) => {
+        if (window.confirm('Are you sure you want to delete this review?')) {
+            try {
+                // DELETE /api/products/:id/reviews/:reviewId
+                await api.delete(`/products/${review.productId}/reviews/${review._id}`);
+                alert('Review deleted successfully');
+                fetchReviews();
+            } catch (error) {
+                console.error('Error deleting review:', error);
+                alert('Failed to delete review');
+            }
+        }
+    };
+
+    const handleEditClick = (review) => {
+        setEditingReview(review);
+        setFormData({
+            name: review.name || 'Anonymous',
+            rating: review.rating,
+            comment: review.comment
+        });
+        setIsEditModalOpen(true);
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        setSubmitting(true);
+        try {
+            await api.put(`/products/${editingReview.productId}/reviews/${editingReview._id}`, formData);
+            alert('Review updated successfully');
+            setIsEditModalOpen(false);
+            fetchReviews();
+        } catch (error) {
+            console.error('Error updating review:', error);
+            alert('Failed to update review');
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     const columns = [
         {
@@ -93,6 +133,28 @@ const Reviews = () => {
             key: 'createdAt',
             label: 'Date',
             render: (value) => <span className="text-gray-500 dark:text-gray-400">{new Date(value).toLocaleDateString()}</span>
+        },
+        {
+            key: 'actions',
+            label: 'Actions',
+            render: (_, row) => (
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => handleEditClick(row)}
+                        className="p-1 hover:bg-gray-100 dark:hover:bg-slate-700 rounded text-blue-600"
+                        title="Edit Review"
+                    >
+                        <Pencil className="w-4 h-4" />
+                    </button>
+                    <button
+                        onClick={() => handleDelete(row)}
+                        className="p-1 hover:bg-gray-100 dark:hover:bg-slate-700 rounded text-red-600"
+                        title="Delete Review"
+                    >
+                        <Trash2 className="w-4 h-4" />
+                    </button>
+                </div>
+            )
         }
     ];
 
@@ -102,23 +164,10 @@ const Reviews = () => {
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Customer Reviews</h1>
                     <p className="text-gray-600 dark:text-gray-400 mt-1">
-                        View feedback and ratings from your customers
+                        Manage customer feedback (Edit or Delete)
                     </p>
                 </div>
             </div>
-
-            {/* Debug Info Alert */}
-            {reviews.length === 0 && (
-                <div className="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
-                    <h3 className="font-bold text-blue-800 dark:text-blue-300">Debug Information</h3>
-                    <p className="text-sm text-blue-700 dark:text-blue-400">
-                        Products Fetched: {debugInfo.products}<br />
-                        Reviews Found: {debugInfo.reviews}<br />
-                        Error: {debugInfo.error || 'None'}<br />
-                        Timestamp: {new Date().toLocaleTimeString()}
-                    </p>
-                </div>
-            )}
 
             {loading ? (
                 <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-xl border-2 border-gray-200 dark:border-slate-800">
@@ -131,6 +180,72 @@ const Reviews = () => {
                     data={reviews}
                 />
             )}
+
+            {/* Edit Modal */}
+            <Modal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                title="Edit Review"
+            >
+                <form onSubmit={handleUpdate} className="space-y-4">
+                    <FormInput
+                        label="Customer Name"
+                        type="text"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    />
+
+                    <div>
+                        <label className="block text-sm font-bold text-gray-900 dark:text-white mb-2">
+                            Rating (1-5)
+                        </label>
+                        <div className="flex gap-2">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <button
+                                    key={star}
+                                    type="button"
+                                    onClick={() => setFormData({ ...formData, rating: star })}
+                                    className={`text-2xl transition-colors ${star <= formData.rating ? 'text-yellow-400' : 'text-gray-300'
+                                        }`}
+                                >
+                                    ★
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-bold text-gray-900 dark:text-white mb-2">
+                            Review Comment
+                        </label>
+                        <textarea
+                            value={formData.comment}
+                            onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none h-32 resize-none"
+                            required
+                        />
+                    </div>
+
+                    <div className="flex justify-end gap-3 mt-6">
+                        <button
+                            type="button"
+                            onClick={() => setIsEditModalOpen(false)}
+                            className="btn-secondary"
+                            disabled={submitting}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className="btn-primary flex items-center justify-center gap-2 min-w-[120px]"
+                            disabled={submitting}
+                        >
+                            {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </Modal>
         </div>
     );
 };
