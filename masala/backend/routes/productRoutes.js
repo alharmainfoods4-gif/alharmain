@@ -10,7 +10,9 @@ const {
     createProduct,
     updateProduct,
     deleteProduct,
-    addReview
+    addReview,
+    deleteReview,
+    updateReview
 } = require('../controllers/productController');
 const { protect } = require('../middlewares/auth');
 const { authorize } = require('../middlewares/roleCheck');
@@ -30,7 +32,7 @@ router.put('/:id', protect, authorize('admin'), updateProduct);
 router.delete('/:id', protect, authorize('admin'), deleteProduct);
 
 // Review Management (Admin)
-router.delete('/:id/reviews/:reviewId', protect, authorize('admin'), deleteProduct); // Using checking auth logic from controller
-router.put('/:id/reviews/:reviewId', protect, authorize('admin'), updateProduct); // Using checking auth logic from controller
+router.delete('/:id/reviews/:reviewId', protect, authorize('admin'), deleteReview);
+router.put('/:id/reviews/:reviewId', protect, authorize('admin'), updateReview);
 
 module.exports = router;
