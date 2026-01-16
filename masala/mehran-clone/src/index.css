@@ -201,6 +201,7 @@ h6 {
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.3s ease;
+    text-decoration: none;
 }
 
 .btn-outline-v2:hover {
