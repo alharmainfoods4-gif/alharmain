@@ -85,6 +85,13 @@ exports.submitContactForm = async (req, res, next) => {
                     <h2 style="color: #C9A24D;">Thank You!</h2>
                     <p>Dear ${name},</p>
                     <p>We have received your message and will get back to you shortly.</p>
+                    
+                    <div style="background-color: #f9f9f9; padding: 15px; border-left: 4px solid #C9A24D; margin: 20px 0;">
+                        <p style="margin-top: 0; color: #555;"><strong>Your Query:</strong></p>
+                        <p><strong>Subject:</strong> ${subject}</p>
+                        <p><strong>Message:</strong><br/>${message}</p>
+                    </div>
+
                     <p><strong>Al-Harmain Foods Team</strong></p>
                 </div>
             `
