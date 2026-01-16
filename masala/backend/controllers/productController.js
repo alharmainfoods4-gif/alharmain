@@ -239,3 +239,92 @@ exports.addReview = async (req, res, next) => {
         next(error);
     }
 };
+
+/**
+ * @route   DELETE /api/products/:id/reviews/:reviewId
+ * @desc    Delete review (Admin only)
+ * @access  Private/Admin
+ */
+exports.deleteReview = async (req, res, next) => {
+    try {
+        const { id, reviewId } = req.params;
+
+        // 1. Remove Review using $pull (bypasses validation)
+        const productAfterPull = await Product.findByIdAndUpdate(
+            id,
+            { $pull: { reviews: { _id: reviewId } } },
+            { new: true }
+        );
+
+        if (!productAfterPull) {
+            return errorResponse(res, 404, 'Product not found');
+        }
+
+        // 2. Recalculate Rating
+        const reviews = productAfterPull.reviews;
+        let rating = 0;
+        let numReviews = 0;
+
+        if (reviews.length > 0) {
+            const totalRating = reviews.reduce((sum, r) => sum + r.rating, 0);
+            rating = (totalRating / reviews.length).toFixed(1);
+            numReviews = reviews.length;
+        }
+
+        // 3. Update Rating (bypasses validation)
+        await Product.findByIdAndUpdate(
+            id,
+            { $set: { rating, numReviews } },
+            { new: true, runValidators: false }
+        );
+
+        successResponse(res, 200, 'Review deleted successfully');
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
+ * @route   PUT /api/products/:id/reviews/:reviewId
+ * @desc    Update review (Admin only)
+ * @access  Private/Admin
+ */
+exports.updateReview = async (req, res, next) => {
+    try {
+        const { id, reviewId } = req.params;
+        const { rating, comment, name } = req.body; // Allow name update too
+
+        // 1. Update specific review fields using array filters (bypasses validation)
+        const updateFields = {};
+        if (rating) updateFields['reviews.$.rating'] = Number(rating);
+        if (comment) updateFields['reviews.$.comment'] = comment;
+        if (name) updateFields['reviews.$.name'] = name;
+
+        const productAfterUpdate = await Product.findOneAndUpdate(
+            { _id: id, "reviews._id": reviewId },
+            { $set: updateFields },
+            { new: true }
+        );
+
+        if (!productAfterUpdate) {
+            return errorResponse(res, 404, 'Product or review not found');
+        }
+
+        // 2. Recalculate Rating (if rating changed)
+        if (rating) {
+            const reviews = productAfterUpdate.reviews;
+            const totalRating = reviews.reduce((sum, r) => sum + r.rating, 0);
+            const newRating = (totalRating / reviews.length).toFixed(1);
+
+            await Product.findByIdAndUpdate(
+                id,
+                { $set: { rating: newRating } },
+                { new: true, runValidators: false }
+            );
+        }
+
+        successResponse(res, 200, 'Review updated successfully');
+    } catch (error) {
+        next(error);
+    }
+};

@@ -29,4 +29,8 @@ router.post('/', protect, authorize('admin'), createProductValidation, validate,
 router.put('/:id', protect, authorize('admin'), updateProduct);
 router.delete('/:id', protect, authorize('admin'), deleteProduct);
 
+// Review Management (Admin)
+router.delete('/:id/reviews/:reviewId', protect, authorize('admin'), deleteProduct); // Using checking auth logic from controller
+router.put('/:id/reviews/:reviewId', protect, authorize('admin'), updateProduct); // Using checking auth logic from controller
+
 module.exports = router;
