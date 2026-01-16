@@ -219,7 +219,7 @@ const Home = () => {
                     {bestSellers.map((product, i) => (
                         <Link to="/products" key={product.id || product._id} className="card-modern signature-card">
                             <div className="signature-img-container">
-                                <img src={(product.images?.[0] || product.image) && (product.images?.[0] || product.image).startsWith('http') ? (product.images?.[0] || product.image) : ((product.images?.[0] || product.image) && (product.images?.[0] || product.image).startsWith('/') ? (product.images?.[0] || product.image) : `/api/uploads/${(product.images?.[0] || product.image) || ''}`)} alt={product.name} style={{ width: '80%', height: '80%', objectFit: 'contain', transition: 'transform 0.5s' }}
+                                <img src={(product.images?.[0] || product.image) && (product.images?.[0] || product.image).startsWith('http') ? (product.images?.[0] || product.image) : ((product.images?.[0] || product.image) && (product.images?.[0] || product.image).startsWith('/') ? (product.images?.[0] || product.image) : `/api/uploads/${(product.images?.[0] || product.image) || ''}`)} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }}
                                     onMouseEnter={e => e.target.style.transform = 'scale(1.1)'}
                                     onMouseLeave={e => e.target.style.transform = 'scale(1)'}
                                 />
