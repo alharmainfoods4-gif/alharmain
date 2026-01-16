@@ -27,7 +27,7 @@ const Home = () => {
 
         categories.forEach(cat => {
             const product = products.find(p => {
-                const catName = typeof p.category === 'object' ? p.category.name : p.category;
+                const catName = p.category && typeof p.category === 'object' ? p.category.name : p.category;
                 return catName === cat.name;
             });
 

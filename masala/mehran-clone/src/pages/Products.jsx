@@ -528,7 +528,7 @@ const Products = () => {
                                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
                                                     <div>
                                                         <h3 style={{ fontSize: isMobile ? '1rem' : '1.1rem', fontFamily: 'Playfair Display, serif', color: 'var(--text-main)', marginBottom: '0.2rem' }}>{product.name}</h3>
-                                                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{typeof product.category === 'object' ? product.category.name : product.category}</p>
+                                                        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{typeof product.category === 'object' ? product.category?.name : product.category}</p>
                                                     </div>
                                                     <span style={{ color: 'var(--brand-primary)', fontWeight: 'bold', fontSize: isMobile ? '0.9rem' : '1rem' }}>Rs. {product.basePrice || product.price}</span>
                                                 </div>
@@ -754,7 +754,7 @@ const Products = () => {
                                 <div style={{ marginBottom: '4rem' }}>
                                     <h3 style={{ fontFamily: 'Playfair Display', fontSize: '2rem', marginBottom: '2rem', color: 'var(--text-main)' }}>Perfect Pairings</h3>
                                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '2rem' }}>
-                                        {products.filter(p => (typeof p.category === 'object' ? p.category.name : p.category) === (typeof selectedProduct.category === 'object' ? selectedProduct.category.name : selectedProduct.category) && (p._id || p.id) !== (selectedProduct._id || selectedProduct.id)).slice(0, 4).map(product => (
+                                        {products.filter(p => (typeof p.category === 'object' ? p.category?.name : p.category) === (typeof selectedProduct.category === 'object' ? selectedProduct.category?.name : selectedProduct.category) && (p._id || p.id) !== (selectedProduct._id || selectedProduct.id)).slice(0, 4).map(product => (
                                             <div key={product.id || product._id} className="card-modern" onClick={() => setSelectedProduct(product)} style={{ cursor: 'pointer', padding: 0, overflow: 'hidden' }}>
                                                 <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#121212', overflow: 'hidden' }}>
                                                     <img

@@ -331,7 +331,7 @@ const Header = () => {
                                                 {product.name}
                                             </h4>
                                             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', marginBottom: '0.5rem' }}>
-                                                {typeof product.category === 'object' ? product.category.name : product.category}
+                                                {typeof product.category === 'object' ? product.category?.name : product.category}
                                             </p>
                                             <p style={{ color: 'var(--brand-primary)', fontWeight: 'bold', fontSize: '1.1rem' }}>
                                                 Rs. {product.basePrice || product.price}
