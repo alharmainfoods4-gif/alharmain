@@ -60,7 +60,6 @@ exports.getProducts = async (req, res, next) => {
             .populate('category', 'name slug')
             .sort(sort)
             .limit(limit)
-            .limit(limit)
             .skip(skip);
 
         console.log(`[getProducts] Fetched ${products.length} products`);
@@ -74,7 +73,7 @@ exports.getProducts = async (req, res, next) => {
 
         const total = await Product.countDocuments(query);
 
-        paginatedResponse(res, 200, products, page, limit, total);
+        paginatedResponse(res, 200, { products }, page, limit, total);
     } catch (error) {
         next(error);
     }
