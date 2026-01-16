@@ -170,7 +170,7 @@ const Products = () => {
     // Filter Logic
     const filteredProducts = products.filter(p => {
         // 1. Category Filter
-        const matchesCategory = !selectedCategory || p.category?.name === selectedCategory || p.category === selectedCategory;
+        const matchesCategory = !selectedCategory || (typeof p.category === 'object' ? p.category?.name : p.category) === selectedCategory;
 
         // 2. Gift Box Filter (Strict)
         // If we are on Gift Box page, ONLY show items with isGiftBox === true

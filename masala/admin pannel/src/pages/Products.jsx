@@ -18,9 +18,12 @@ const Products = () => {
             // Fetch products - get all for now to let DataTable handle local filtering/pagination
             const response = await api.get('/products?isGiftBox=false&limit=1000');
             // Handle both array and object (nested or flat) responses
-            const productList = Array.isArray(response)
-                ? response
-                : (response.data?.products || response.products || (Array.isArray(response.data) ? response.data : []));
+            // Handle both array and object (nested or flat) responses
+            const responseData = Array.isArray(response) ? response : (response.data || response);
+            // If responseData is { products: [...] }
+            const productList = Array.isArray(responseData)
+                ? responseData
+                : (responseData.products || (Array.isArray(responseData.data) ? responseData.data : []));
             setProducts(productList);
             setError(null);
         } catch (err) {

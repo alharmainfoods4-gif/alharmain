@@ -95,7 +95,7 @@ const Header = () => {
     const filteredProducts = searchQuery.trim()
         ? products.filter(product =>
             product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (typeof product.category === 'object' ? product.category.name : product.category).toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (typeof product.category === 'object' ? product.category?.name : product.category)?.toLowerCase().includes(searchQuery.toLowerCase()) ||
             (product.description && product.description.toLowerCase().includes(searchQuery.toLowerCase()))
         )
         : [];
