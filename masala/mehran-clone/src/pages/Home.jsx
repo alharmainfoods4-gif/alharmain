@@ -26,7 +26,9 @@ const Home = () => {
         const result = [];
 
         categories.forEach(cat => {
+            if (!cat) return;
             const product = products.find(p => {
+                if (!p) return false;
                 const catName = p.category && typeof p.category === 'object' ? p.category.name : p.category;
                 return catName === cat.name;
             });

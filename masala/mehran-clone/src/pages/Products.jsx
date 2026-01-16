@@ -455,19 +455,19 @@ const Products = () => {
                                         {categories.map((cat, i) => (
                                             <button
                                                 key={i}
-                                                onClick={() => setSelectedCategory(cat.name)}
+                                                onClick={() => setSelectedCategory(cat?.name)}
                                                 style={{
                                                     padding: isMobile ? '0.5rem 1rem' : '0.6rem 1.5rem',
                                                     borderRadius: '50px',
-                                                    border: `1px solid ${selectedCategory === cat.name ? 'var(--brand-primary)' : 'rgba(255,255,255,0.2)'}`,
-                                                    background: selectedCategory === cat.name ? 'var(--brand-primary)' : 'transparent',
-                                                    color: selectedCategory === cat.name ? '#000' : 'var(--text-muted)',
+                                                    border: `1px solid ${selectedCategory === cat?.name ? 'var(--brand-primary)' : 'rgba(255,255,255,0.2)'}`,
+                                                    background: selectedCategory === cat?.name ? 'var(--brand-primary)' : 'transparent',
+                                                    color: selectedCategory === cat?.name ? '#000' : 'var(--text-muted)',
                                                     cursor: 'pointer',
                                                     transition: 'all 0.3s',
                                                     fontSize: isMobile ? '0.8rem' : '1rem'
                                                 }}
                                             >
-                                                {cat.name}
+                                                {typeof cat === 'object' ? cat?.name : cat}
                                             </button>
                                         ))}
                                     </div>

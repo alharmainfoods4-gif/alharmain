@@ -226,7 +226,7 @@ const Header = () => {
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                 {categories.map((cat, i) => (
                                     <span key={i} className="menu-item-secondary"
-                                        onClick={() => handleNavClick(`/products?category=${encodeURIComponent(cat.name)}`)}
+                                        onClick={() => handleNavClick(`/products?category=${encodeURIComponent(cat?.name)}`)}
                                         style={{ color: 'rgba(255,255,255,0.6)', cursor: 'pointer', transition: 'color 0.3s', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                                         onMouseEnter={e => {
                                             e.target.style.color = 'var(--brand-primary)';
@@ -237,7 +237,7 @@ const Header = () => {
                                             e.target.style.paddingLeft = '0';
                                         }}
                                     >
-                                        <FaChevronRight size={10} style={{ opacity: 0.5 }} /> <span className="menu-item-secondary-text">{cat.name}</span>
+                                        <FaChevronRight size={10} style={{ opacity: 0.5 }} /> <span className="menu-item-secondary-text">{cat?.name}</span>
                                     </span>
                                 ))}
                             </div>
