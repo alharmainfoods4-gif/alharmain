@@ -170,7 +170,8 @@ const Products = () => {
     // Filter Logic
     const filteredProducts = products.filter(p => {
         // 1. Category Filter
-        const matchesCategory = !selectedCategory || (typeof p.category === 'object' ? p.category?.name : p.category) === selectedCategory;
+        const pCategory = typeof p.category === 'object' ? p.category?.name : p.category;
+        const matchesCategory = !selectedCategory || (pCategory && pCategory.toLowerCase().trim() === selectedCategory.toLowerCase().trim());
 
         // 2. Gift Box Filter (Strict)
         // If we are on Gift Box page, ONLY show items with isGiftBox === true
@@ -502,11 +503,11 @@ const Products = () => {
                                             style={{ cursor: 'pointer', padding: '0', position: 'relative', height: isMobile ? 'auto' : '480px', display: 'flex', flexDirection: 'column' }}
                                         >
                                             {/* Image Area */}
-                                            <div style={{ flex: 1, position: 'relative', overflow: 'hidden', padding: isMobile ? '1.5rem' : '2rem', background: '#121212', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: isMobile ? '300px' : '350px' }}>
+                                            <div style={{ flex: 1, position: 'relative', overflow: 'hidden', padding: isMobile ? '' : '', background: '#121212', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: isMobile ? '300px' : '350px' }}>
                                                 <img
                                                     src={(product.images?.[0] || product.image) && (product.images?.[0] || product.image).startsWith('http') ? (product.images?.[0] || product.image) : ((product.images?.[0] || product.image) && (product.images?.[0] || product.image).startsWith('/') ? (product.images?.[0] || product.image) : `/api/uploads/${(product.images?.[0] || product.image) || ''}`)}
                                                     alt={product.name}
-                                                    style={{ width: '95%', height: '95%', objectFit: 'contain', transition: 'transform 0.5s', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }}
+                                                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.5))' }}
                                                     onMouseEnter={e => e.target.style.transform = "scale(1.05)"}
                                                     onMouseLeave={e => e.target.style.transform = "scale(1)"}
                                                 />

@@ -4,7 +4,9 @@ import { API_ROUTES } from '../config/constants';
 const productService = {
     // Get all products with filters
     getAll: async (filters = {}) => {
-        const queryParams = new URLSearchParams(filters).toString();
+        // Default to fetching all products if no limit is specified, to allow client-side filtering
+        const finalFilters = { limit: 1000, ...filters };
+        const queryParams = new URLSearchParams(finalFilters).toString();
         const url = queryParams ? `${API_ROUTES.PRODUCTS.BASE}?${queryParams}` : API_ROUTES.PRODUCTS.BASE;
         const response = await api.get(url);
         return response.data;
