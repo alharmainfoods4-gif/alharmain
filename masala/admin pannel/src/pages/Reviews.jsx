@@ -15,7 +15,12 @@ const Reviews = () => {
             const response = await api.get('/products?limit=1000&includeReviews=true');
             console.log('API Response:', response);
             // Handle { status: 'success', data: [...] } or direct array
-            const products = Array.isArray(response) ? response : (response.data || response.products || []);
+            // Handle { status: 'success', data: { products: [...] } }
+            // api.js returns data object. If controller returns { products: [...] } inside data...
+            // We need to dig deeper.
+            const products = Array.isArray(response)
+                ? response
+                : (response.data?.products || response.products || (Array.isArray(response.data) ? response.data : []));
             console.log('Products fetched:', products.length);
 
             // Extract reviews from all products

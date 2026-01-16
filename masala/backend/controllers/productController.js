@@ -221,7 +221,8 @@ exports.addReview = async (req, res, next) => {
             successResponse(res, 201, 'Review added successfully', { product });
         } catch (saveError) {
             console.error('Error saving review to product:', saveError);
-            return errorResponse(res, 500, 'Failed to save review to database', saveError.message);
+            // Include actual error message in the response for debugging
+            return errorResponse(res, 500, `Failed to save review: ${saveError.message}`, saveError);
         }
     } catch (error) {
         next(error);
