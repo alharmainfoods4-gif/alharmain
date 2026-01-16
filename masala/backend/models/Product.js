@@ -11,7 +11,7 @@ const reviewSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    name: { type: String, required: true },
+    name: { type: String, default: 'Anonymous' },
     rating: {
         type: Number,
         required: true,
@@ -37,7 +37,7 @@ const variantSchema = new mongoose.Schema({
     },
     sku: {
         type: String,
-        required: true
+        required: false // Relaxed for legacy data
     },
     stock: {
         type: Number,

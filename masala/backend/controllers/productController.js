@@ -207,7 +207,7 @@ exports.addReview = async (req, res, next) => {
 
         const review = {
             user: req.user.id,
-            name: req.user.name,
+            name: req.user.name || 'Anonymous',
             rating: Number(rating),
             comment
         };
